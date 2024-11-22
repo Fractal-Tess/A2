@@ -1,0 +1,17 @@
+{
+	"$schema": "https://next.shadcn-svelte.com/schema.json",
+	"style": "default",
+	"tailwind": {
+		"config": "tailwind.config.ts",
+		"css": "src/globals.pcss",
+		"baseColor": "zinc"
+	},
+	"aliases": {
+		"components": "@repo/ui",
+		"utils": "@repo/ui/utils",
+		"ui": "@repo/ui/ui",
+		"hooks": "@repo/ui/hooks"
+	},
+	"typescript": true,
+	"registry": "https://next.shadcn-svelte.com/registry"
+}
