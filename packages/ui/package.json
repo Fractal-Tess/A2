@@ -9,6 +9,11 @@
       "types": "./index.ts",
       "svelte": "./index.ts"
     },
+    "./darkmode": {
+      "types": "./src/ui/darkmode/index.ts",
+      "default": "./src/ui/darkmode/index.ts",
+      "svelte": "./src/ui/darkmode/index.ts"
+    },
     "./button": {
       "types": "./src/ui/button/index.ts",
       "default": "./src/ui/button/index.ts",
@@ -74,6 +79,8 @@
     "daisyui": "^4.12.14",
     "formsnap": "2.0.0-next.1",
     "lucide-svelte": "^0.460.1",
+    "mode-watcher": "^0.5.0",
+    "node-watcher": "^0.0.4",
     "svelte": "^5.2.7",
     "sveltekit-superforms": "^2.20.1",
     "tailwind-merge": "^2.5.4",

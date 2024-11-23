@@ -10,6 +10,10 @@
 	import * as Avatar from '@repo/ui/avatar';
 	import * as HoverCard from '@repo/ui/hover-card';
 	import { onMount } from 'svelte';
+	import Sun from 'lucide-svelte/icons/sun';
+	import Moon from 'lucide-svelte/icons/moon';
+
+	import { toggleMode } from 'mode-watcher';
 
 	let { userId }: { userId: string } = $props();
 
@@ -27,16 +31,14 @@
 	let budget = $state(5);
 	let hobbies = $state(5);
 	let interests = $state(5);
-	let age = $state(5);
-	let sex = $state(5);
+	let ageAndSex = $state(5);
 	let overall = $state(5);
 
 	function resetStars() {
 		budget = 5;
 		hobbies = 5;
 		interests = 5;
-		age = 5;
-		sex = 5;
+		ageAndSex = 5;
 		overall = 5;
 	}
 
@@ -81,8 +83,7 @@
 			budget,
 			hobbies,
 			interests,
-			age,
-			sex,
+			ageAndSex,
 			overall,
 			userId: userId,
 			picked: product.$id,
@@ -102,9 +103,9 @@
 
 {#if products}
 	<div class="relative mx-auto flex w-full max-w-6xl flex-1 items-center justify-center gap-16">
-		<div class="absolute right-4 top-4 flex gap-8">
+		<div class="flexe absolute right-4 top-4 flex items-center gap-8">
 			<div>
-				<span class="text-primary font-bold italic">{labeledProductIds.length}</span> Items labeled
+				<span class="font-bold italic text-primary">{labeledProductIds.length}</span> Items labeled
 			</div>
 			<HoverCard.Root>
 				<HoverCard.Trigger
@@ -114,8 +115,17 @@
 					class="rounded-sm underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-black"
 					>@Profile</HoverCard.Trigger
 				>
+				<Button onclick={toggleMode} variant="outline" size="icon">
+					<Sun
+						class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
+					/>
+					<Moon
+						class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+					/>
+					<span class="sr-only">Toggle theme</span>
+				</Button>
 				<HoverCard.Content>
-					<div class="flex flex-1 flex-col gap-1 text-xs">
+					<togg <div class="flex flex-1 flex-col gap-1 text-xs">
 						<h4 class="text-sm font-semibold">@Webbers</h4>
 						{#await profile}
 							Loading...
@@ -136,8 +146,8 @@
 								Budget: <span class="text-primary">{value.documents[0].budget}</span>
 							</p>
 						{/await}
-					</div>
-				</HoverCard.Content>
+					</togg></HoverCard.Content
+				>
 			</HoverCard.Root>
 		</div>
 		<div class="mb-6 flex-1 rounded-lg bg-white p-6 shadow-lg">
@@ -157,8 +167,10 @@
 
 		<form onsubmit={handleSubmit} class="flex-1 rounded-lg bg-white p-6 shadow-lg">
 			<div class="space-y-8 [&_label]:pb-2 [&_label]:text-center">
-				<div class="rating rating-lg flex flex-col items-center">
-					<Label class="text-primary text-2xl font-bold">Budget</Label>
+				<div class="rating rating-md flex flex-col items-center">
+					<Label class="text-lg font-bold text-primary"
+						>Цената отговаря ли на вашите изисквания?</Label
+					>
 					<div>
 						{#each Array(10) as _, i}
 							<input
@@ -172,8 +184,10 @@
 					</div>
 				</div>
 
-				<div class="rating rating-lg flex flex-col items-center">
-					<Label class="text-primary text-2xl font-bold">Hobbies</Label>
+				<div class="rating rating-md flex flex-col items-center">
+					<Label class="text-lg font-bold text-primary"
+						>Подаръка отговаря ли на вашите хобита?</Label
+					>
 					<div>
 						{#each Array(10) as _, i}
 							<input
@@ -187,8 +201,25 @@
 					</div>
 				</div>
 
-				<div class="rating rating-lg flex flex-col items-center">
-					<Label class="text-primary text-2xl font-bold">Age</Label>
+				<div class="rating rating-md flex flex-col items-center">
+					<Label class="text-lg font-bold text-primary"
+						>Подаръка отговаря ли на вашите интереси?</Label
+					>
+					<div>
+						{#each Array(10) as _, i}
+							<input
+								type="radio"
+								name="rating-hobbies"
+								class="mask mask-star-2 bg-orange-400"
+								value={i + 1}
+								bind:group={interests}
+							/>
+						{/each}
+					</div>
+				</div>
+
+				<div class="rating rating-md flex flex-col items-center">
+					<Label class="text-lg font-bold text-primary">Отговаря ли на вашият пол и възраст?</Label>
 					<div>
 						{#each Array(10) as _, i}
 							<input
@@ -196,29 +227,16 @@
 								name="rating-age"
 								class="mask mask-star-2 bg-orange-400"
 								value={i + 1}
-								bind:group={age}
+								bind:group={ageAndSex}
 							/>
 						{/each}
 					</div>
 				</div>
 
-				<div class="rating rating-lg flex flex-col items-center">
-					<Label class="text-primary text-2xl font-bold">Sex</Label>
-					<div>
-						{#each Array(10) as _, i}
-							<input
-								type="radio"
-								name="rating-sex"
-								class="mask mask-star-2 bg-orange-400"
-								value={i + 1}
-								bind:group={sex}
-							/>
-						{/each}
-					</div>
-				</div>
-
-				<div class="rating rating-lg flex flex-col items-center">
-					<Label class="text-primary text-2xl font-bold">Overall</Label>
+				<div class="rating rating-md flex flex-col items-center">
+					<Label class="text-lg font-bold text-primary"
+						>Каква е вашата оценка на база на критерии извън въпросите по-горе?</Label
+					>
 					<div>
 						{#each Array(10) as _, i}
 							<input
