@@ -9,22 +9,67 @@
       "types": "./index.ts",
       "svelte": "./index.ts"
     },
-    "./globals.pcss": "./src/globals.pcss",
+    "./button": {
+      "types": "./src/ui/button/index.ts",
+      "default": "./src/ui/button/index.ts",
+      "svelte": "./src/ui/button/index.ts"
+    },
+    "./dialog": {
+      "types": "./src/ui/dialog/index.ts",
+      "default": "./src/ui/dialog/index.ts",
+      "svelte": "./src/ui/dialog/index.ts"
+    },
+    "./label": {
+      "types": "./src/ui/label/index.ts",
+      "default": "./src/ui/label/index.ts",
+      "svelte": "./src/ui/label/index.ts"
+    },
+    "./input": {
+      "types": "./src/ui/input/index.ts",
+      "default": "./src/ui/input/index.ts",
+      "svelte": "./src/ui/input/index.ts"
+    },
+    "./select": {
+      "types": "./src/ui/select/index.ts",
+      "default": "./src/ui/select/index.ts",
+      "svelte": "./src/ui/select/index.ts"
+    },
+    "./textarea": {
+      "types": "./src/ui/textarea/index.ts",
+      "default": "./src/ui/textarea/index.ts",
+      "svelte": "./src/ui/textarea/index.ts"
+    },
+    "./slider": {
+      "types": "./src/ui/slider/index.ts",
+      "default": "./src/ui/slider/index.ts",
+      "svelte": "./src/ui/slider/index.ts"
+    },
+    "./form": {
+      "types": "./src/ui/form/index.ts",
+      "default": "./src/ui/form/index.ts",
+      "svelte": "./src/ui/form/index.ts"
+    },
+    "./app.pcss": "./src/app.pcss",
     "./tailwind.config.ts": "./tailwind.config.ts",
-    "./utils": "./src/utils.ts"
+    "./utils.js": "./src/utils.ts"
   },
   "scripts": {
     "lint": "eslint ."
   },
   "devDependencies": {
+    "@iconify/svelte": "^4.0.2",
     "@repo/eslint-config": "workspace:*",
-    "bits-ui": "^0.21.16",
+    "bits-ui": "1.0.0-next.64",
     "clsx": "^2.1.1",
+    "formsnap": "2.0.0-next.1",
+    "lucide-svelte": "^0.460.1",
     "svelte": "^5.2.7",
+    "sveltekit-superforms": "^2.20.1",
     "tailwind-merge": "^2.5.4",
     "tailwind-variants": "^0.3.0",
     "tailwindcss": "^3.4.15",
     "tailwindcss-animate": "^1.0.7",
-    "typescript": "5.5.4"
+    "typescript": "5.5.4",
+    "zod": "^3.23.8"
   }
 }
