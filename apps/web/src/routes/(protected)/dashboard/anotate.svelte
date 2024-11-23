@@ -156,7 +156,7 @@
 				alt="Product"
 				class="mb-4 h-64 w-full rounded-lg object-cover"
 			/>
-			<h2 class="mb-2 text-xl font-bold">{products.at(0)?.label}</h2>
+			<h2 class="mb-2 text-xl font-bold text-gray-800">{products.at(0)?.label}</h2>
 			<p class="mb-2 text-gray-600">Original Price: {products.at(0)?.originalPrice}</p>
 			<p class="mb-2 text-gray-700">{products.at(0)?.description}</p>
 			<p class="mb-2 text-gray-600">Category: {products.at(0)?.category}</p>
