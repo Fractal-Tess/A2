@@ -209,7 +209,7 @@
 						{#each Array(10) as _, i}
 							<input
 								type="radio"
-								name="rating-hobbies"
+								name="rating-interests"
 								class="mask mask-star-2 bg-orange-400"
 								value={i + 1}
 								bind:group={interests}
