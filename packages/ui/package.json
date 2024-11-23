@@ -49,6 +49,16 @@
       "default": "./src/ui/form/index.ts",
       "svelte": "./src/ui/form/index.ts"
     },
+    "./hover-card": {
+      "types": "./src/ui/hover-card/index.ts",
+      "default": "./src/ui/hover-card/index.ts",
+      "svelte": "./src/ui/hover-card/index.ts"
+    },
+    "./avatar": {
+      "types": "./src/ui/avatar/index.ts",
+      "default": "./src/ui/avatar/index.ts",
+      "svelte": "./src/ui/avatar/index.ts"
+    },
     "./app.pcss": "./src/app.pcss",
     "./tailwind.config.ts": "./tailwind.config.ts",
     "./utils.js": "./src/utils.ts"
@@ -61,6 +71,7 @@
     "@repo/eslint-config": "workspace:*",
     "bits-ui": "1.0.0-next.64",
     "clsx": "^2.1.1",
+    "daisyui": "^4.12.14",
     "formsnap": "2.0.0-next.1",
     "lucide-svelte": "^0.460.1",
     "svelte": "^5.2.7",

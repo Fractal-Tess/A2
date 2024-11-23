@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import { createSessionClient } from '$lib/client/appwrite';
 	import { PUBLIC_APPWRITE_DATABASE_ID } from '$env/static/public';
 	import { Button } from '@repo/ui';
@@ -7,151 +6,239 @@
 	import { Slider } from '@repo/ui/slider';
 	import { Query } from 'appwrite';
 	import type { Models } from 'appwrite';
-	const { account, databases } = createSessionClient($page.data.session!);
 	import { ID } from 'appwrite';
+	import * as Avatar from '@repo/ui/avatar';
+	import * as HoverCard from '@repo/ui/hover-card';
+	import { onMount } from 'svelte';
 
-	let anotatedIds = [''] as string[];
+	let { userId }: { userId: string } = $props();
+
+	const { account, databases } = createSessionClient(userId);
+
+	const profile = databases.listDocuments(PUBLIC_APPWRITE_DATABASE_ID, 'PROFILES', [
+		Query.equal('$id', userId)
+	]);
 
 	// Items
 	let products = $state([] as Models.Document[]);
-	let index = $state(0);
+	let labeledProductIds = $state([] as string[]);
 
-	// Sliders
-	let budgetSlider = $state([5]);
-	let hobbiesSlider = $state([5]);
-	let interestsSlider = $state([5]);
-	let ageSlider = $state([5]);
-	let sexSlider = $state([5]);
-	let overallSlider = $state([5]);
+	// Stars
+	let budget = $state(5);
+	let hobbies = $state(5);
+	let interests = $state(5);
+	let age = $state(5);
+	let sex = $state(5);
+	let overall = $state(5);
+
+	function resetStars() {
+		budget = 5;
+		hobbies = 5;
+		interests = 5;
+		age = 5;
+		sex = 5;
+		overall = 5;
+	}
 
 	async function loadData() {
-		const anotated = await databases.listDocuments(PUBLIC_APPWRITE_DATABASE_ID, 'GRADE', [
-			Query.equal('userId', $page.data.user!.$id),
-			Query.limit(1000)
-		]);
-
-		anotatedIds = anotated.documents.map((doc) => doc.picked.$id);
+		console.log('Fetching data...');
 		try {
 			const response = await databases.listDocuments(PUBLIC_APPWRITE_DATABASE_ID, 'P', [
-				Query.limit(1500)
+				Query.limit(25),
+				Query.offset(labeledProductIds.length)
 			]);
-			products = response.documents.filter((doc) => !anotatedIds.includes(doc.$id));
+			products = response.documents.filter((doc) => !labeledProductIds.includes(doc.$id));
 		} catch (error) {
 			console.error('Error fetching products:', error);
-		} finally {
-			index = 0;
 		}
 	}
-	$effect(() => {
-		if (products.length === 0) loadData();
-	});
+	async function loadLabeled() {
+		// Get all of the already labeled items by this user
+		for (let i = 0; ; i++) {
+			console.log(`fetching preload ${i * 50 + 1}`);
+			const labeled = await databases.listDocuments(PUBLIC_APPWRITE_DATABASE_ID, 'GRADE', [
+				Query.equal('userId', userId),
+				Query.limit(50),
+				Query.offset(i * 50 + 1)
+			]);
+			if (!labeled.documents.length) break;
+			labeledProductIds.push(...labeled.documents.map((doc) => doc.picked.$id));
+		}
+	}
 
-	async function handleSubmit(e: SubmitEvent) {
+	async function handleSubmit(e: SubmitEvent, skipped?: boolean) {
 		e.preventDefault();
-		const id = products[index].$id;
+
+		// If the number of products in the buffer are decreasing, fill them back up
+		if (products.length < 10) loadData();
+		const product = products.shift();
+		// If there are no products left, return
+		if (!product) return;
+
 		await databases.createDocument(PUBLIC_APPWRITE_DATABASE_ID, 'GRADE', ID.unique(), {
-			budget: budgetSlider[0],
-			hobbies: hobbiesSlider[0],
-			interests: interestsSlider[0],
-			age: ageSlider[0],
-			sex: sexSlider[0],
-			overall: overallSlider[0],
-			userId: $page.data.user!.$id,
-			picked: id
+			budget,
+			hobbies,
+			interests,
+			age,
+			sex,
+			overall,
+			userId: userId,
+			picked: product.$id,
+			skipped: skipped ?? false
 		});
 
-		index += 1;
+		labeledProductIds.push(product.$id);
+
+		resetStars();
 	}
 
-	function handleKeyPress(event: KeyboardEvent, slider: any) {
-		const key = parseInt(event.key);
-		if (!isNaN(key) && key >= 1 && key <= 9) {
-			slider[0] = key;
-		}
-	}
+	onMount(async () => {
+		await loadLabeled();
+		await loadData();
+	});
 </script>
 
-{#if products[index]}
-	<div class=" mx-auto flex w-full max-w-6xl flex-1 items-center justify-center gap-16">
+{#if products.at(0)}
+	<div class="relative mx-auto flex w-full max-w-6xl flex-1 items-center justify-center gap-16">
+		<div class="absolute right-4 top-4 flex gap-8">
+			<div>
+				<span class="text-primary font-bold italic">{labeledProductIds.length}</span> Items labeled
+			</div>
+			<HoverCard.Root>
+				<HoverCard.Trigger
+					href="https://github.com/sveltejs"
+					target="_blank"
+					rel="noreferrer noopener"
+					class="rounded-sm underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-black"
+					>@Profile</HoverCard.Trigger
+				>
+				<HoverCard.Content>
+					<div class="flex flex-1 flex-col gap-1 text-xs">
+						<h4 class="text-sm font-semibold">@Webbers</h4>
+						{#await profile}
+							Loading...
+						{:then value}
+							<p>
+								Age: <span class="text-primary">{value.documents[0].age}</span>
+							</p>
+							<p>
+								Sex: <span class="text-primary">{value.documents[0].sex}</span>
+							</p>
+							<p>
+								Hobbies: <span class="text-primary">{value.documents[0].hobbies}</span>
+							</p>
+							<p>
+								Interests: <span class="text-primary">{value.documents[0].interests}</span>
+							</p>
+							<p>
+								Budget: <span class="text-primary">{value.documents[0].budget}</span>
+							</p>
+						{/await}
+					</div>
+				</HoverCard.Content>
+			</HoverCard.Root>
+		</div>
 		<div class="mb-6 flex-1 rounded-lg bg-white p-6 shadow-lg">
 			<img
-				src={products[index].imgUrl}
+				src={products.at(0)?.imgUrl}
 				alt="Product"
 				class="mb-4 h-64 w-full rounded-lg object-cover"
 			/>
-			<h2 class="mb-2 text-xl font-bold">{products[index].label}</h2>
-			<p class="mb-2 text-gray-600">Original Price: {products[index].originalPrice}</p>
-			<p class="mb-2 text-gray-600">Current Price: {products[index].currentPrice}</p>
-			<p class="mb-2 text-gray-700">{products[index].description}</p>
-			<p class="mb-2 text-gray-600">Category: {products[index].category}</p>
-			<a href={products[index].url} target="_blank" class="text-blue-500 hover:underline"
+			<h2 class="mb-2 text-xl font-bold">{products.at(0)?.label}</h2>
+			<p class="mb-2 text-gray-600">Original Price: {products.at(0)?.originalPrice}</p>
+			<p class="mb-2 text-gray-700">{products.at(0)?.description}</p>
+			<p class="mb-2 text-gray-600">Category: {products.at(0)?.category}</p>
+			<a href={products.at(0)?.url} target="_blank" class="text-blue-500 hover:underline"
 				>View Product</a
 			>
 		</div>
 
 		<form onsubmit={handleSubmit} class="flex-1 rounded-lg bg-white p-6 shadow-lg">
 			<div class="space-y-8 [&_label]:pb-2 [&_label]:text-center">
-				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-				<div
-					role="group"
-					onkeydown={(e) => handleKeyPress(e, budgetSlider)}
-					class="focus-within:ring-primary rounded-md p-2 focus-within:ring-2"
-				>
-					<Label class="pointer-events-none block text-sm font-medium text-gray-700">Budget</Label>
-					<Slider bind:value={budgetSlider} min={0} max={10} class="w-full" />
-					<span class="text-sm text-gray-500">{budgetSlider}</span>
+				<div class="rating rating-lg flex flex-col items-center">
+					<Label class="text-primary text-2xl font-bold">Budget</Label>
+					<div>
+						{#each Array(10) as _, i}
+							<input
+								type="radio"
+								name="rating-budget"
+								class="mask mask-star-2 bg-orange-400"
+								value={i + 1}
+								bind:group={budget}
+							/>
+						{/each}
+					</div>
 				</div>
-				<div
-					role="group"
-					onkeydown={(e) => handleKeyPress(e, hobbiesSlider)}
-					class="focus-within:ring-primary rounded-md p-2 focus-within:ring-2"
-				>
-					<Label class="pointer-events-none block text-sm font-medium text-gray-700">Hobbies</Label>
-					<Slider bind:value={hobbiesSlider} min={0} max={10} class="w-full" />
-					<span class="text-sm text-gray-500">{hobbiesSlider}</span>
+
+				<div class="rating rating-lg flex flex-col items-center">
+					<Label class="text-primary text-2xl font-bold">Hobbies</Label>
+					<div>
+						{#each Array(10) as _, i}
+							<input
+								type="radio"
+								name="rating-hobbies"
+								class="mask mask-star-2 bg-orange-400"
+								value={i + 1}
+								bind:group={hobbies}
+							/>
+						{/each}
+					</div>
 				</div>
-				<div
-					role="group"
-					onkeydown={(e) => handleKeyPress(e, interestsSlider)}
-					class="focus-within:ring-primary rounded-md p-2 focus-within:ring-2"
-				>
-					<Label class="pointer-events-none block text-sm font-medium text-gray-700"
-						>Interests</Label
+
+				<div class="rating rating-lg flex flex-col items-center">
+					<Label class="text-primary text-2xl font-bold">Age</Label>
+					<div>
+						{#each Array(10) as _, i}
+							<input
+								type="radio"
+								name="rating-age"
+								class="mask mask-star-2 bg-orange-400"
+								value={i + 1}
+								bind:group={age}
+							/>
+						{/each}
+					</div>
+				</div>
+
+				<div class="rating rating-lg flex flex-col items-center">
+					<Label class="text-primary text-2xl font-bold">Sex</Label>
+					<div>
+						{#each Array(10) as _, i}
+							<input
+								type="radio"
+								name="rating-sex"
+								class="mask mask-star-2 bg-orange-400"
+								value={i + 1}
+								bind:group={sex}
+							/>
+						{/each}
+					</div>
+				</div>
+
+				<div class="rating rating-lg flex flex-col items-center">
+					<Label class="text-primary text-2xl font-bold">Overall</Label>
+					<div>
+						{#each Array(10) as _, i}
+							<input
+								type="radio"
+								name="rating-overall"
+								class="mask mask-star-2 bg-orange-400"
+								value={i + 1}
+								bind:group={overall}
+							/>
+						{/each}
+					</div>
+				</div>
+
+				<div class="space-y-2">
+					<Button class="w-full" type="submit">Next</Button>
+					<Button
+						class="w-full"
+						variant="outline"
+						type="button"
+						onclick={(e: SubmitEvent) => handleSubmit(e, true)}>Skip</Button
 					>
-					<Slider bind:value={interestsSlider} min={0} max={10} class="w-full" />
-					<span class="text-sm text-gray-500">{interestsSlider}</span>
 				</div>
-				<div
-					role="group"
-					onkeydown={(e) => handleKeyPress(e, ageSlider)}
-					class="focus-within:ring-primary rounded-md p-2 focus-within:ring-2"
-				>
-					<Label class="block text-sm font-medium text-gray-700">Age</Label>
-					<Slider bind:value={ageSlider} min={0} max={10} class="w-full" />
-					<span class="text-sm text-gray-500">{ageSlider}</span>
-				</div>
-				<div
-					role="group"
-					onkeydown={(e) => handleKeyPress(e, sexSlider)}
-					class="focus-within:ring-primary rounded-md p-2 focus-within:ring-2"
-				>
-					<Label
-						class="pointer-events-none pointer-events-none block text-sm font-medium text-gray-700"
-						>Sex</Label
-					>
-					<Slider bind:value={sexSlider} min={0} max={10} class="w-full" />
-					<span class="text-sm text-gray-500">{sexSlider}</span>
-				</div>
-				<div
-					role="group"
-					onkeydown={(e) => handleKeyPress(e, overallSlider)}
-					class="focus-within:ring-primary rounded-md p-2 focus-within:ring-2"
-				>
-					<Label class="block text-sm font-medium text-gray-700">Overall</Label>
-					<Slider bind:value={overallSlider} min={0} max={10} class="w-full" />
-					<span class="text-sm text-gray-500">{overallSlider}</span>
-				</div>
-				<Button class="w-full" type="submit">Next</Button>
 			</div>
 		</form>
 	</div>
