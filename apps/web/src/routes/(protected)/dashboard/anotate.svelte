@@ -49,14 +49,11 @@
 				Query.offset(labeledProductIds.length)
 			]);
 			products = response.documents.filter((doc) => !labeledProductIds.includes(doc.$id));
-		} catch (error) {
-			console.error('Error fetching products:', error);
-		}
+		} catch (error) {}
 	}
 	async function loadLabeled() {
 		// Get all of the already labeled items by this user
 		for (let i = 0; ; i++) {
-			console.log(`fetching preload ${i * 50 + 1}`);
 			const labeled = await databases.listDocuments(PUBLIC_APPWRITE_DATABASE_ID, 'GRADE', [
 				Query.equal('userId', userId),
 				Query.limit(50),
@@ -125,7 +122,7 @@
 					<span class="sr-only">Toggle theme</span>
 				</Button>
 				<HoverCard.Content>
-					<togg <div class="flex flex-1 flex-col gap-1 text-xs">
+					<togg <div class="flex flex-1 flex-col items-center justify-center gap-1 text-sm">
 						<h4 class="text-sm font-semibold">@Webbers</h4>
 						{#await profile}
 							Loading...
@@ -150,22 +147,22 @@
 				>
 			</HoverCard.Root>
 		</div>
-		<div class="mb-6 flex-1 rounded-lg bg-white p-6 shadow-lg">
+		<div class="mb-6 flex-1 rounded-lg bg-muted p-6 shadow-lg">
 			<img
 				src={products.at(0)?.imgUrl}
 				alt="Product"
 				class="mb-4 h-64 w-full rounded-lg object-cover"
 			/>
-			<h2 class="mb-2 text-xl font-bold text-gray-800">{products.at(0)?.label}</h2>
-			<p class="mb-2 text-gray-600">Original Price: {products.at(0)?.originalPrice}</p>
-			<p class="mb-2 text-gray-700">{products.at(0)?.description}</p>
-			<p class="mb-2 text-gray-600">Category: {products.at(0)?.category}</p>
+			<h2 class="mb-2 text-xl font-bold">{products.at(0)?.label}</h2>
+			<p class="mb-2">Original Price: {products.at(0)?.originalPrice}</p>
+			<p class="mb-2">{products.at(0)?.description}</p>
+			<p class="mb-2">Category: {products.at(0)?.category}</p>
 			<a href={products.at(0)?.url} target="_blank" class="text-blue-500 hover:underline"
 				>View Product</a
 			>
 		</div>
 
-		<form onsubmit={handleSubmit} class="flex-1 rounded-lg bg-white p-6 shadow-lg">
+		<form onsubmit={handleSubmit} class="flex-1 rounded-lg bg-muted p-6 shadow-lg">
 			<div class="space-y-8 [&_label]:pb-2 [&_label]:text-center">
 				<div class="rating rating-md flex flex-col items-center">
 					<Label class="text-lg font-bold text-primary"
