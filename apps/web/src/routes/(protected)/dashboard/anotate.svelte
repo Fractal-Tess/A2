@@ -3,11 +3,9 @@
 	import { PUBLIC_APPWRITE_DATABASE_ID } from '$env/static/public';
 	import { Button } from '@repo/ui';
 	import { Label } from '@repo/ui/label';
-	import { Slider } from '@repo/ui/slider';
 	import { Query } from 'appwrite';
 	import type { Models } from 'appwrite';
 	import { ID } from 'appwrite';
-	import * as Avatar from '@repo/ui/avatar';
 	import * as HoverCard from '@repo/ui/hover-card';
 	import { onMount } from 'svelte';
 	import Sun from 'lucide-svelte/icons/sun';
@@ -18,6 +16,9 @@
 	let { userId }: { userId: string } = $props();
 
 	const { account, databases } = createSessionClient(userId);
+
+	let itemCollection = 'P';
+	let labelCollection = 'GRADE';
 
 	const profile = databases.listDocuments(PUBLIC_APPWRITE_DATABASE_ID, 'PROFILES', [
 		Query.equal('$id', userId)
@@ -42,19 +43,32 @@
 		overall = 5;
 	}
 
-	async function loadData() {
-		try {
-			const response = await databases.listDocuments(PUBLIC_APPWRITE_DATABASE_ID, 'P', [
-				Query.limit(25),
-				Query.offset(labeledProductIds.length)
-			]);
-			products = response.documents.filter((doc) => !labeledProductIds.includes(doc.$id));
-		} catch (error) {}
+	async function switchCollections() {
+		itemCollection = 'BS';
+		labelCollection = 'GRADE2';
+		products = [];
+		labeledProductIds = [];
+		await loadLabeled();
+		await loadData();
 	}
+
+	async function loadData() {
+		const response = await databases.listDocuments(PUBLIC_APPWRITE_DATABASE_ID, itemCollection, [
+			Query.limit(25),
+			Query.offset(labeledProductIds.length)
+		]);
+		products = response.documents.filter((doc) => !labeledProductIds.includes(doc.$id));
+
+		// If there are no products left in the current collection, switch to the other one
+		if (!products.length && itemCollection === 'P') {
+			switchCollections();
+		}
+	}
+
 	async function loadLabeled() {
 		// Get all of the already labeled items by this user
 		for (let i = 0; ; i++) {
-			const labeled = await databases.listDocuments(PUBLIC_APPWRITE_DATABASE_ID, 'GRADE', [
+			const labeled = await databases.listDocuments(PUBLIC_APPWRITE_DATABASE_ID, labelCollection, [
 				Query.equal('userId', userId),
 				Query.limit(50),
 				Query.offset(i * 50 + 1)
@@ -71,12 +85,11 @@
 		if (!products) return;
 
 		// If the number of products in the buffer are decreasing, fill them back up
-		if (products.length < 10) loadData();
 		const product = products.shift();
 		// If there are no products left, return
 		if (!product) return;
 
-		await databases.createDocument(PUBLIC_APPWRITE_DATABASE_ID, 'GRADE', ID.unique(), {
+		await databases.createDocument(PUBLIC_APPWRITE_DATABASE_ID, labelCollection, ID.unique(), {
 			budget,
 			hobbies,
 			interests,
@@ -88,6 +101,7 @@
 		});
 
 		labeledProductIds.push(product.$id);
+		if (!products.length) loadData();
 
 		resetStars();
 	}
