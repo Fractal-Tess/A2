@@ -20,7 +20,7 @@
 	]);
 
 	// Items
-	let products = $state([] as Models.Document[]);
+	let products = $state<null | Models.Document[]>(null);
 	let labeledProductIds = $state([] as string[]);
 
 	// Stars
@@ -41,7 +41,6 @@
 	}
 
 	async function loadData() {
-		console.log('Fetching data...');
 		try {
 			const response = await databases.listDocuments(PUBLIC_APPWRITE_DATABASE_ID, 'P', [
 				Query.limit(25),
@@ -68,6 +67,9 @@
 
 	async function handleSubmit(e: SubmitEvent, skipped?: boolean) {
 		e.preventDefault();
+
+		// Should not be possible
+		if (!products) return;
 
 		// If the number of products in the buffer are decreasing, fill them back up
 		if (products.length < 10) loadData();
@@ -98,7 +100,7 @@
 	});
 </script>
 
-{#if products.at(0)}
+{#if products}
 	<div class="relative mx-auto flex w-full max-w-6xl flex-1 items-center justify-center gap-16">
 		<div class="absolute right-4 top-4 flex gap-8">
 			<div>
@@ -243,7 +245,10 @@
 		</form>
 	</div>
 {:else}
-	<div class="mx-auto max-w-2xl p-6 text-center">
-		<h2 class="text-xl font-bold">No more products to grade</h2>
+	<div
+		class="mx-auto flex h-full max-w-2xl flex-1 flex-col items-center justify-center gap-8 p-6 text-center"
+	>
+		<span class="loading loading-spinner loading-lg text-primary"></span>
+		<p class="mt-4 text-xl font-bold">Loading more products...</p>
 	</div>
 {/if}
