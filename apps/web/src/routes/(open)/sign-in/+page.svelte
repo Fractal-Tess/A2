@@ -12,12 +12,12 @@
 
 <div class="relative flex min-h-[100svh]">
 	<section class="flex w-full flex-col items-center justify-center gap-8 p-8 lg:w-1/2">
-		<h2 class="text-center text-3xl font-bold text-gray-800">Sign In</h2>
+		<h2 class="text-center text-3xl font-bold">Sign In</h2>
 
 		<div class="w-full max-w-md space-y-4">
 			<Button
 				variant="outline"
-				class="flex w-full items-center justify-center gap-2"
+				class="dark:bg-muted dark:text-muted-foreground flex w-full items-center justify-center gap-2"
 				onclick={() => signIn(OAuthProvider.Google)}
 			>
 				<Icon icon="logos:google-icon" />
@@ -26,10 +26,10 @@
 
 			<Button
 				variant="outline"
-				class="flex w-full items-center justify-center gap-2"
+				class="dark:bg-muted dark:text-muted-foreground flex w-full items-center justify-center gap-2"
 				onclick={() => signIn(OAuthProvider.Github)}
 			>
-				<Icon icon="logos:github-icon" />
+				<Icon icon="logos:github-icon" class="dark:invert" />
 				Sign in with GitHub
 			</Button>
 			<div class="relative">
@@ -43,7 +43,7 @@
 
 			<Button
 				variant="outline"
-				class="flex w-full items-center justify-center gap-2"
+				class="dark:bg-muted dark:text-muted-foreground flex w-full items-center justify-center gap-2"
 				onclick={() => alert('Not implemented')}
 			>
 				<Icon icon="lucide:key" />
@@ -51,7 +51,7 @@
 			</Button>
 			<Button
 				variant="outline"
-				class="flex w-full items-center justify-center gap-2"
+				class="dark:bg-muted dark:text-muted-foreground flex w-full items-center justify-center gap-2"
 				onclick={() => alert('Not implemented')}
 			>
 				<Icon icon="lucide:fingerprint" />
