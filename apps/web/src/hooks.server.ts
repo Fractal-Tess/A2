@@ -6,7 +6,7 @@ export async function handle({ event, resolve }) {
 		const { account } = createSessionClient(event.cookies.get(PUBLIC_SESSION_COOKIE) ?? '');
 		event.locals.user = await account.get();
 		event.locals.session = event.cookies.get(PUBLIC_SESSION_COOKIE);
-	} catch {}
+	} catch { }
 
 	return resolve(event);
 }
