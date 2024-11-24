@@ -55,7 +55,6 @@
 			budget: Number(formData.get('budget')), // Convert to number
 			sex: selectedSex
 		};
-		console.log(data);
 
 		const result = schema.safeParse(data);
 		if (!result.success) {
