@@ -116,7 +116,7 @@
 	<div class="relative mx-auto flex w-full max-w-6xl flex-1 items-center justify-center gap-16">
 		<div class="flexe absolute right-4 top-4 flex items-center gap-8">
 			<div>
-				<span class="font-bold italic text-primary">{labeledProductIds.length}</span> Items labeled
+				<span class="text-primary font-bold italic">{labeledProductIds.length}</span> Items labeled
 			</div>
 			<HoverCard.Root>
 				<HoverCard.Trigger
@@ -126,15 +126,18 @@
 					class="rounded-sm underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-black"
 					>@Profile</HoverCard.Trigger
 				>
-				<Button onclick={toggleMode} variant="outline" size="icon">
-					<Sun
-						class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
-					/>
-					<Moon
-						class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
-					/>
-					<span class="sr-only">Toggle theme</span>
-				</Button>
+				<div class="flex items-center gap-2">
+					<Button onclick={toggleMode} variant="outline" size="icon">
+						<Sun
+							class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
+						/>
+						<Moon
+							class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+						/>
+						<span class="sr-only">Toggle theme</span>
+					</Button>
+					<Button href="/sign-out" variant="outline">Sign-out</Button>
+				</div>
 				<HoverCard.Content>
 					<togg <div class="flex flex-1 flex-col items-center justify-center gap-1 text-sm">
 						<h4 class="text-sm font-semibold">@Webbers</h4>
@@ -161,7 +164,7 @@
 				>
 			</HoverCard.Root>
 		</div>
-		<div class="mb-6 flex-1 rounded-lg bg-muted p-6 shadow-lg">
+		<div class="bg-muted mb-6 flex-1 rounded-lg p-6 shadow-lg">
 			<img
 				src={products.at(0)?.imgUrl}
 				alt="Product"
@@ -176,10 +179,10 @@
 			>
 		</div>
 
-		<form onsubmit={handleSubmit} class="flex-1 rounded-lg bg-muted p-6 shadow-lg">
+		<form onsubmit={handleSubmit} class="bg-muted flex-1 rounded-lg p-6 shadow-lg">
 			<div class="space-y-8 [&_label]:pb-2 [&_label]:text-center">
 				<div class="rating rating-md flex flex-col items-center">
-					<Label class="text-lg font-bold text-primary"
+					<Label class="text-primary text-lg font-bold"
 						>Цената отговаря ли на вашите изисквания?</Label
 					>
 					<div>
@@ -196,7 +199,7 @@
 				</div>
 
 				<div class="rating rating-md flex flex-col items-center">
-					<Label class="text-lg font-bold text-primary"
+					<Label class="text-primary text-lg font-bold"
 						>Подаръка отговаря ли на вашите хобита?</Label
 					>
 					<div>
@@ -213,7 +216,7 @@
 				</div>
 
 				<div class="rating rating-md flex flex-col items-center">
-					<Label class="text-lg font-bold text-primary"
+					<Label class="text-primary text-lg font-bold"
 						>Подаръка отговаря ли на вашите интереси?</Label
 					>
 					<div>
@@ -230,7 +233,7 @@
 				</div>
 
 				<div class="rating rating-md flex flex-col items-center">
-					<Label class="text-lg font-bold text-primary">Отговаря ли на вашият пол и възраст?</Label>
+					<Label class="text-primary text-lg font-bold">Отговаря ли на вашият пол и възраст?</Label>
 					<div>
 						{#each Array(10) as _, i}
 							<input
@@ -245,7 +248,7 @@
 				</div>
 
 				<div class="rating rating-md flex flex-col items-center">
-					<Label class="text-lg font-bold text-primary"
+					<Label class="text-primary text-lg font-bold"
 						>Каква е вашата оценка на база на критерии извън въпросите по-горе?</Label
 					>
 					<div>
