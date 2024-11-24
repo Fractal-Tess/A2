@@ -1,7 +1,7 @@
 import { PUBLIC_APPWRITE_PROJECT_ID, PUBLIC_APPWRITE_URL } from '$env/static/public';
 import { Account, Client, Databases } from 'appwrite';
 
-export function createSessionClient(session: string) {
+export function createSessionClient(session?: string) {
 	const client = new Client()
 		.setEndpoint(PUBLIC_APPWRITE_URL)
 		.setProject(PUBLIC_APPWRITE_PROJECT_ID);
