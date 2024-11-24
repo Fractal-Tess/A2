@@ -18,7 +18,7 @@ export async function GET(event) {
 	const headers = new Headers({
 		location: '/dashboard',
 		'set-cookie': event.cookies.serialize(PUBLIC_SESSION_COOKIE, session.secret, {
-			sameSite: 'strict',
+			sameSite: 'lax',
 			expires: new Date(session.expire),
 			secure: !dev,
 			path: '/'
