@@ -1,6 +1,6 @@
 import { dev } from '$app/environment';
 import { PUBLIC_SESSION_COOKIE } from '$env/static/public';
-import { createAdminClient } from '$lib/server/appwrite';
+import { createAdminClient } from '$lib/appwrite/server';
 
 export async function GET(event) {
 	const userId = event.url.searchParams.get('userId');

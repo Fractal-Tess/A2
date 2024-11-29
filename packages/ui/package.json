@@ -9,6 +9,26 @@
       "types": "./index.ts",
       "svelte": "./index.ts"
     },
+    "./badge": {
+      "types": "./src/ui/badge/index.ts",
+      "default": "./src/ui/badge/index.ts",
+      "svelte": "./src/ui/badge/index.ts"
+    },
+    "./toast": {
+      "types": "./src/ui/sonner/toaster.ts",
+      "default": "./src/ui/sonner/toaster.ts",
+      "svelte": "./src/ui/sonner/toaster.ts"
+    },
+    "./sonner": {
+      "types": "./src/ui/sonner/index.ts",
+      "default": "./src/ui/sonner/index.ts",
+      "svelte": "./src/ui/sonner/index.ts"
+    },
+    "./card": {
+      "types": "./src/ui/card/index.ts",
+      "default": "./src/ui/card/index.ts",
+      "svelte": "./src/ui/card/index.ts"
+    },
     "./darkmode": {
       "types": "./src/ui/darkmode/index.ts",
       "default": "./src/ui/darkmode/index.ts",
@@ -82,6 +102,7 @@
     "mode-watcher": "^0.5.0",
     "node-watcher": "^0.0.4",
     "svelte": "^5.2.7",
+    "svelte-sonner": "^0.3.28",
     "sveltekit-superforms": "^2.20.1",
     "tailwind-merge": "^2.5.4",
     "tailwind-variants": "^0.3.0",

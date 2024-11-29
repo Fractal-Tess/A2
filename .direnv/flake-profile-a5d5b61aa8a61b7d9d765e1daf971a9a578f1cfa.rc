@@ -35,13 +35,13 @@ NIX_CC='/nix/store/zznja5f8v3jafffyah1rk46vpfcn38dv-gcc-wrapper-13.3.0'
 export NIX_CC
 NIX_CC_WRAPPER_TARGET_HOST_x86_64_unknown_linux_gnu='1'
 export NIX_CC_WRAPPER_TARGET_HOST_x86_64_unknown_linux_gnu
-NIX_CFLAGS_COMPILE=' -frandom-seed=jwpningnlc -isystem /nix/store/w78sh036dyn14f29w8za9ni9syrmwm3q-nodejs-20.17.0/include -isystem /nix/store/w78sh036dyn14f29w8za9ni9syrmwm3q-nodejs-20.17.0/include'
+NIX_CFLAGS_COMPILE=' -frandom-seed=v3kjkn5h1q -isystem /nix/store/w78sh036dyn14f29w8za9ni9syrmwm3q-nodejs-20.17.0/include -isystem /nix/store/w78sh036dyn14f29w8za9ni9syrmwm3q-nodejs-20.17.0/include'
 export NIX_CFLAGS_COMPILE
 NIX_ENFORCE_NO_NATIVE='1'
 export NIX_ENFORCE_NO_NATIVE
 NIX_HARDENING_ENABLE='bindnow format fortify fortify3 pic relro stackprotector strictoverflow zerocallusedregs'
 export NIX_HARDENING_ENABLE
-NIX_LDFLAGS='-rpath /home/fractal-tess/dev/a2/outputs/out/lib '
+NIX_LDFLAGS='-rpath /home/fractal-tess/dev/A2/outputs/out/lib '
 export NIX_LDFLAGS
 NIX_NO_SELF_RPATH='1'
 NIX_STORE='/nix/store'
@@ -65,6 +65,8 @@ RANLIB='ranlib'
 export RANLIB
 READELF='readelf'
 export READELF
+SHELL='/nix/store/izpf49b74i15pcr9708s3xdwyqs4jxwl-bash-5.2p32/bin/bash'
+export SHELL
 SIZE='size'
 export SIZE
 SOURCE_DATE_EPOCH='315532800'
@@ -135,7 +137,7 @@ name='nix-shell-env'
 export name
 nativeBuildInputs='/nix/store/w78sh036dyn14f29w8za9ni9syrmwm3q-nodejs-20.17.0 /nix/store/8zlqhgw5hbakbk2850wvky9x2vqbsqyw-pnpm-9.10.0 /nix/store/9yd6frl42syv6vncdy619zblj2vg406g-yarn-1.22.22 /nix/store/d1laj0rnvlpz5l4xyalx87sxslkccl0w-fsouza-prettierd-0.25.3 /nix/store/rbqbiw6jai3iqzcbkgvkgk0cm1mjm176-npm-check-updates-16.14.12 /nix/store/s16x7xirg7n3gy54c8xpz0n9jlr92zl2-npkill-0.12.2'
 export nativeBuildInputs
-out='/home/fractal-tess/dev/a2/outputs/out'
+out='/home/fractal-tess/dev/A2/outputs/out'
 export out
 outputBin='out'
 outputDev='out'
@@ -166,7 +168,7 @@ preConfigurePhases=' updateAutotoolsGnuConfigScriptsPhase'
 declare -a preFixupHooks=('_moveToShare' '_multioutDocs' '_multioutDevs' )
 preferLocalBuild='1'
 export preferLocalBuild
-prefix='/home/fractal-tess/dev/a2/outputs/out'
+prefix='/home/fractal-tess/dev/A2/outputs/out'
 declare -a propagatedBuildDepFiles=('propagated-build-build-deps' 'propagated-native-build-inputs' 'propagated-build-target-deps' )
 propagatedBuildInputs=''
 export propagatedBuildInputs
@@ -2013,4 +2015,4 @@ export TMP="$NIX_BUILD_TOP"
 export TMPDIR="$NIX_BUILD_TOP"
 export TEMP="$NIX_BUILD_TOP"
 export TEMPDIR="$NIX_BUILD_TOP"
-eval "$shellHook"
+eval "${shellHook:-}"

@@ -77,6 +77,9 @@ importers:
       svelte-check:
         specifier: ^4.0.9
         version: 4.0.9(picomatch@4.0.2)(svelte@5.2.7)(typescript@5.6.3)
+      svelte-sonner:
+        specifier: ^0.3.28
+        version: 0.3.28(svelte@5.2.7)
       sveltekit-superforms:
         specifier: ^2.20.1
         version: 2.20.1(@sveltejs/kit@2.8.1(@sveltejs/vite-plugin-svelte@4.0.1(svelte@5.2.7)(vite@5.4.11))(svelte@5.2.7)(vite@5.4.11))(@types/json-schema@7.0.15)(svelte@5.2.7)(typescript@5.6.3)
@@ -146,6 +149,9 @@ importers:
       svelte:
         specifier: ^5.2.7
         version: 5.2.7
+      svelte-sonner:
+        specifier: ^0.3.28
+        version: 0.3.28(svelte@5.2.7)
       sveltekit-superforms:
         specifier: ^2.20.1
         version: 2.20.1(@sveltejs/kit@2.8.1(@sveltejs/vite-plugin-svelte@4.0.1(svelte@5.2.7)(vite@5.4.11))(svelte@5.2.7)(vite@5.4.11))(@types/json-schema@7.0.15)(svelte@5.2.7)(typescript@5.5.4)
@@ -1799,6 +1805,11 @@ packages:
     peerDependenciesMeta:
       svelte:
         optional: true
+
+  svelte-sonner@0.3.28:
+    resolution: {integrity: sha512-K3AmlySeFifF/cKgsYNv5uXqMVNln0NBAacOYgmkQStLa/UoU0LhfAACU6Gr+YYC8bOCHdVmFNoKuDbMEsppJg==}
+    peerDependencies:
+      svelte: ^3.0.0 || ^4.0.0 || ^5.0.0-next.1
 
   svelte-toolbelt@0.4.6:
     resolution: {integrity: sha512-k8OUvXBUifHZcAlWeY/HLg/4J0v5m2iOfOhn8fDmjt4AP8ZluaDh9eBFus9lFiLX6O5l6vKqI1dKL5wy7090NQ==}
@@ -3584,6 +3595,10 @@ snapshots:
       postcss: 8.4.49
       postcss-scss: 4.0.9(postcss@8.4.49)
     optionalDependencies:
+      svelte: 5.2.7
+
+  svelte-sonner@0.3.28(svelte@5.2.7):
+    dependencies:
       svelte: 5.2.7
 
   svelte-toolbelt@0.4.6(svelte@5.2.7):

@@ -1,13 +1,19 @@
 <script lang="ts">
 	import { PUBLIC_FQDN } from '$env/static/public';
-	import { createSessionClient } from '$lib/client/appwrite';
+	import { createSessionClient } from '$lib/appwrite/client';
 	import { Button, Icon } from '@repo/ui';
 	import { OAuthProvider } from 'appwrite';
 
 	async function signIn(provider: OAuthProvider) {
+		spinner = provider;
 		const { account } = createSessionClient();
 		await account.createOAuth2Token(provider, `${PUBLIC_FQDN}/sign-in/callback`);
 	}
+	$effect(() => {
+		console.log(spinner);
+	});
+
+	let spinner = $state<OAuthProvider | null>(null);
 </script>
 
 <div class="relative flex min-h-[100svh]">
@@ -16,21 +22,29 @@
 
 		<div class="w-full max-w-md space-y-4">
 			<Button
-				variant="outline"
-				class="dark:bg-muted dark:text-muted-foreground flex w-full items-center justify-center gap-2"
+				variant="secondary"
+				class="flex w-full items-center justify-center gap-2"
 				onclick={() => signIn(OAuthProvider.Google)}
 			>
-				<Icon icon="logos:google-icon" />
-				Sign in with Google
+				{#if spinner === OAuthProvider.Google}
+					<span class="loading loading-spinner"></span>
+				{:else}
+					<Icon icon="logos:google-icon" />
+					Sign in with Google
+				{/if}
 			</Button>
 
 			<Button
-				variant="outline"
-				class="dark:bg-muted dark:text-muted-foreground flex w-full items-center justify-center gap-2"
+				variant="secondary"
+				class="flex w-full items-center justify-center gap-2"
 				onclick={() => signIn(OAuthProvider.Github)}
 			>
-				<Icon icon="logos:github-icon" class="dark:invert" />
-				Sign in with GitHub
+				{#if spinner === OAuthProvider.Github}
+					<span class="loading loading-spinner"></span>
+				{:else}
+					<Icon icon="logos:github-icon" class="dark:invert" />
+					Sign in with GitHub
+				{/if}
 			</Button>
 			<div class="relative">
 				<div class="absolute inset-0 flex items-center">
@@ -42,17 +56,17 @@
 			</div>
 
 			<Button
-				variant="outline"
-				class="dark:bg-muted dark:text-muted-foreground flex w-full items-center justify-center gap-2"
-				onclick={() => alert('Not implemented')}
+				variant="ghost"
+				class="dark:bg-muted dark:text-muted-foreground flex w-full items-center justify-center gap-2 opacity-50"
+				disabled={true}
 			>
 				<Icon icon="lucide:key" />
 				SSO
 			</Button>
 			<Button
 				variant="outline"
-				class="dark:bg-muted dark:text-muted-foreground flex w-full items-center justify-center gap-2"
-				onclick={() => alert('Not implemented')}
+				class="dark:bg-muted dark:text-muted-foreground flex w-full items-center justify-center gap-2 opacity-50"
+				disabled={true}
 			>
 				<Icon icon="lucide:fingerprint" />
 				Sign in with Biometrics
@@ -69,8 +83,8 @@
 	</section>
 	<iframe
 		title="Spline"
-		class="hidden lg:block lg:w-1/2"
 		src="https://my.spline.design/clonercubesimplecopy-50b5369e1dfc1f710359510b87e39412/"
 		frameborder="0"
+		class="bg-background hidden w-full lg:block lg:w-1/2"
 	></iframe>
 </div>
