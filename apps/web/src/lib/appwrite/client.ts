@@ -1,14 +1,17 @@
 import { PUBLIC_APPWRITE_PROJECT_ID, PUBLIC_APPWRITE_URL } from '$env/static/public';
-import { PUBLIC_APPWRITE_DATABASE_ID } from "$env/static/public";
-import { Databases, Account, ID, Query, Client, type Models } from "appwrite";
-import type { ProfileModel, PreferencesModel, AppwriteModel, UserModel, Profile } from "./types";
+import { Databases, Account, Client } from "@fractal-tess/appwrite";
+import type { Fetcher, PreferencesModel } from './types';
 
-
-export function createSessionClient(session?: string) {
+/**
+ * Creates a session client for Appwrite.
+ * @param {string} [session] - Optional session token to set for the client.
+ * @returns {Object} An object containing accessors for account and database operations.
+ */
+export function createSessionClient(session?: string, fetch?: Fetcher) {
 	const client = new Client()
 
 	client
-		.setEndpoint(PUBLIC_APPWRITE_URL)
+		.setEndpoint(PUBLIC_APPWRITE_URL, { fetch })
 		.setProject(PUBLIC_APPWRITE_PROJECT_ID);
 
 	if (session) {
@@ -25,34 +28,17 @@ export function createSessionClient(session?: string) {
 	};
 }
 
-export function createSessionAPI(session?: string) {
-	const client = createSessionClient(session);
-	const { account, database } = client;
-
+/**
+ * Creates an API interface for the client.
+ * @param {ReturnType<typeof createSessionClient>} client - The session client to use for API operations.
+ * @returns {Object} An object containing user and collections accessors.
+ */
+export function createClientAPI(client: ReturnType<typeof createSessionClient>) {
 	return {
-		profile: {
-			get: () => {
-				return database.getDocument<ProfileModel>(PUBLIC_APPWRITE_DATABASE_ID, "PROFILES-V2", ID.unique());
-			},
-			create: (profile: Profile) => {
-				return database.createDocument<ProfileModel>(PUBLIC_APPWRITE_DATABASE_ID, "PROFILES-V2", ID.unique(), profile);
-			}
-		},
-
-		preferences: {
-			get: () => {
-				return account.getPrefs<PreferencesModel>();
-			},
-			set: (key: keyof PreferencesModel, val: string | number) => {
-				return account.updatePrefs({ [key]: val });
-			}
-		},
 		user: {
-			get: async () => {
-				const model = await account.get();
-				const session = await account.getSession('current');
-				return { model, session };
-			}
-		}
+			info: () => client.account.get(),
+			preferences: () => client.account.getPrefs<PreferencesModel>()
+		},
+		collections: {}
 	}
 }

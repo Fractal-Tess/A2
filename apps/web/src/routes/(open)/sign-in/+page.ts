@@ -5,6 +5,6 @@ export const load = (async ({ parent }) => {
 	const { user } = await parent();
 
 	if (user) {
-		redirect(302, '/dashboard');
+		redirect(302, '/collections');
 	}
 }) satisfies PageLoad;

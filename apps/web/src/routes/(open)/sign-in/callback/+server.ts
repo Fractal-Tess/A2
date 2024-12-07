@@ -16,7 +16,7 @@ export async function GET(event) {
 	const session = await account.createSession(userId, secret);
 
 	const headers = new Headers({
-		location: '/dashboard',
+		location: '/collections',
 		'set-cookie': event.cookies.serialize(PUBLIC_SESSION_COOKIE, session.secret, {
 			sameSite: 'lax',
 			expires: new Date(session.expire),

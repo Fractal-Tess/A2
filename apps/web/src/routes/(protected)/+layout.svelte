@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { setContext, type Snippet } from 'svelte';
-	import type { LayoutData } from './$types';
-	import Navbar from './Navbar.svelte';
+	import { type Snippet } from 'svelte';
+	import type { State } from '$lib/state.svelte';
 
-	let { children }: { data: LayoutData; children: Snippet } = $props();
+	let { children, data }: { children: Snippet; data: { state: State } } = $props();
 </script>
 
-<Navbar />
-{@render children()}
+<main class="container flex flex-1 flex-col">
+	{@render children()}
+</main>

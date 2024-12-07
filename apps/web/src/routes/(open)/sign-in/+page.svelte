@@ -2,27 +2,23 @@
 	import { PUBLIC_FQDN } from '$env/static/public';
 	import { createSessionClient } from '$lib/appwrite/client';
 	import { Button, Icon } from '@repo/ui';
-	import { OAuthProvider } from 'appwrite';
+	import { OAuthProvider } from '@fractal-tess/appwrite';
 
 	async function signIn(provider: OAuthProvider) {
 		spinner = provider;
 		const { account } = createSessionClient();
 		await account.createOAuth2Token(provider, `${PUBLIC_FQDN}/sign-in/callback`);
 	}
-	$effect(() => {
-		console.log(spinner);
-	});
-
 	let spinner = $state<OAuthProvider | null>(null);
 </script>
 
-<div class="relative flex min-h-[100svh]">
+<div class="relative flex flex-1">
 	<section class="flex w-full flex-col items-center justify-center gap-8 p-8 lg:w-1/2">
 		<h2 class="text-center text-3xl font-bold">Sign In</h2>
 
 		<div class="w-full max-w-md space-y-4">
 			<Button
-				variant="secondary"
+				variant="outline"
 				class="flex w-full items-center justify-center gap-2"
 				onclick={() => signIn(OAuthProvider.Google)}
 			>
@@ -35,7 +31,7 @@
 			</Button>
 
 			<Button
-				variant="secondary"
+				variant="outline"
 				class="flex w-full items-center justify-center gap-2"
 				onclick={() => signIn(OAuthProvider.Github)}
 			>
@@ -56,17 +52,20 @@
 			</div>
 
 			<Button
-				variant="ghost"
+				tabindex={-1}
+				onclick={() => alert('Not implemented')}
+				variant="outline"
 				class="dark:bg-muted dark:text-muted-foreground flex w-full items-center justify-center gap-2 opacity-50"
-				disabled={true}
 			>
 				<Icon icon="lucide:key" />
 				SSO
 			</Button>
+
 			<Button
+				tabindex={-1}
+				onclick={() => alert('Not implemented')}
 				variant="outline"
 				class="dark:bg-muted dark:text-muted-foreground flex w-full items-center justify-center gap-2 opacity-50"
-				disabled={true}
 			>
 				<Icon icon="lucide:fingerprint" />
 				Sign in with Biometrics
